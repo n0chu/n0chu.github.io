@@ -24,9 +24,11 @@ nav a
 {
     text-decoration: none;
     text-transform: uppercase;
+    font-family: 'Cairo', sans-serif;
 }
 
 nav a:hover, nav a:focus
 {
     color: blue;
 }
+
