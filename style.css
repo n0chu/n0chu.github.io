@@ -23,6 +23,7 @@ nav li
 nav a
 {
     text-decoration: none;
+    text-transform: uppercase;
 }
 
 nav a:hover, nav a:focus
