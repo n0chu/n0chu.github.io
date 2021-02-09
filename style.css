@@ -22,6 +22,7 @@ nav li
 
 nav a
 {
+    padding: .5 em;
     text-decoration: none;
     text-transform: uppercase;
     font-family: 'Cairo', sans-serif;
