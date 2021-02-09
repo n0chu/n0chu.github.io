@@ -22,5 +22,5 @@ nav li
 
 nav a:hover, nav a:focus
 {
-    color: grey;
+    color: blue;
 }
