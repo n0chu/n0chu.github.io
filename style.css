@@ -10,6 +10,11 @@ color:blue;
 
 /* Header stylization */
 
+header
+{
+    color: lightslategray;
+}
+
 nav ul
 {
     list-style: none;
@@ -22,7 +27,7 @@ nav li
 
 nav a
 {
-    padding: .5 em;
+    padding: .5 em; /* not sure about this, change it so that the spacing is just horizontal and not vertical too */
     text-decoration: none;
     text-transform: uppercase;
     font-family: 'Cairo', sans-serif;
