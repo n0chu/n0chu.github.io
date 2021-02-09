@@ -7,3 +7,20 @@ background-color: pink;
 {
 color:blue;
 }
+
+/* Header stylization */
+
+nav ul
+{
+    list-style: none;
+}
+
+nav li
+{
+    display: inline-block;
+}
+
+nav a:hover, nav a:focus
+{
+    color: grey;
+}
