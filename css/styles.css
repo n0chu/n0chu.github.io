@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css?family=Offside');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200&family=Oooh+Baby&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200&family=Oooh+Baby&family=Poppins:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@200&family=Montserrat:wght@100;200&family=Oooh+Baby&family=Poppins:wght@100&display=swap');
+
+body
+{
+    background-color: #222222;
+}
+
+#site /* # is ID */
+{
+    background-color: transparent; /*none bg*/
+    border-width: 0px; /*wont show*/
+    padding: 0px; /*NO padding for my parent container */
+    display: grid; /*USE CSS GRID - YEAH~!! */
+    grid-gap: 10px 15px; /*width/x then height/y */
+    /*Mobile layout first - cols, rows, areas, spacing*/
+    grid-template-columns : 1fr; /*single column*/
+    grid-template-areas: /*one string per row */
+        "h"
+        "d1"
+        "d2"
+        "d3"
+        "d4"
+        "d5"
+        "d6";
+}
+
+/* div
+{
+    border: 3px solid #000000;
+    border-radius: 30px;
+    background-color: #e9e9e9;
+    padding: 10px 20px;    
+} */
+
+header{
+    grid-area: h;
+    text-align: center;
+    color: whitesmoke;
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'Oooh Baby', cursive;
+    font-size: 45px;
+}
+
+div.navbar
+{
+    grid-area: d1;
+    font-family: 'Offside', cursive;
+    grid-area: h;
+    background-color: #836953;
+    border: 3px solid #000000;
+    border-radius: 30px;
+    padding: 10px 20px;  
+}
+
+div.midcontent
+{
+    grid-area: d2;
+    font-size: larger;
+    /* border:2px red groove;
+    border-radius: 20px; */
+    padding: 20px;
+    color: white;   
+}
+
+#myVideo{
+    width: 100%;
+    height: auto;
+}
+
+div.footer
+{
+    grid-area: d6;
+    text-align: center;
+    /* border-radius: 10px; */ /*rounds out the edges*/
+    font-size: large;
+    background-color: pink;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+}
+
+a
+{
+    text-decoration: none;
+    vertical-align: middle;
+    font-size:2rem;
+    padding: 2rem;
+}
+
+a:link, a:visited
+{
+    color: white;
+}
+
+a:hover
+{
+    color: #ffb4c8;
+}
+
+a:active 
+{
+    color: #fdfd96;
+}
+
+#mainNav{
+    text-align: center;
+}
+
+#taskbarlogo{
+    transform: scaleX(-1);
+}
+
+p{
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: x-large;
+}
+
+.aboutopening{
+    font-family: 'Poppins', sans-serif;
+    font-weight: bolder;
+    color: #ffb4c8;
+}
+
+/* if media is screen and screen is at least 800px then ... do this*/
+/* Desktop layout with lotso width*/
+@media screen and (min-width: 800px)
+{
+    #site
+    {
+        /* replacement of site specific code for desktop here */
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr; /*6 equal cols*/
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-areas:
+            " h  h  h  h  h  h  h" /* the dot means the block is empty*/
+            "d1 d1 d1 d1 d1 d1 d1"
+            " . d2 d2 d2 d2 d2  ."
+            " . d2 d2 d2 d2 d2  ."
+            " . d2 d2 d2 d2 d2  ."
+            "d5 d5 d5 d5 d5 d5 d5"
+            "d5 d5 d5 d5 d5 d5 d5"
+            "d6 d6 d6 d6 d6 d6 d6";
+    }
+}
