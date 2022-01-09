@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Ina's Portfolio</title>
+        <link href="css/styles.css" rel="stylesheet" />
+        <!-- Website Icon-->
+        <link rel="icon" href="assets/img/portfolioicon.ico">
+        <script src="js/scripts.js"></script>
+    </head>
+    <body id="page-top">
+        <header>
+            <h1>
+                Contact
+            </h1>
+        </header>
+        <!-- Navigation-->
+        <div class="navbar">
+            <nav id="mainNav">
+                <a class="navbarlogo" href="index.html"><img  onmouseover="blossom(this)" id="taskbarlogo" src="assets/img/bigwarmflower.png" alt="..." /></a>
+                <a class="navlink" href="about.html">About</a>
+                <a class="navlink" href="projects.html">Projects</a>
+                <a class="navlink" href="contact.html">Contact</a>
+            </nav>
+        </div>
+        <div id="feedbackMain">
+            <form id="userform" name="feedbackForm" action="portfolio.php" method="post">
+                <div>
+                    <label>
+                        Name:
+                    </label>
+                     <input class="singlefileline" type="text" name="name" required placeholder="Enter Your Name Here">
+                </div>
+                <div>
+                    <label>
+                        Email:
+                    </label>
+                    <input class="singlefileline" type="email" name="email" required placeholder="Enter Your Email Here">
+                </div>
+                <div>
+                    <fieldset>
+                        <legend><i>Was my website helpful and informative?</i></legend><br>
+                        <label><input type="radio" name="descriptive bio" value="liar">No</label><br>
+                        <label><input type="radio" name="descriptive bio" value="just say yes">Kinda</label><br>
+                        <label><input type="radio" name="descriptive bio" value="yey!" checked="checked">Yes</label>
+                    </fieldset>
+                </div>
+                <div>
+                     Rating out of 5? <br>
+                     <input type="range" name="Bonus Marks" min="1" max="5" class="slider">
+                </div>
+                <div class="full-width">
+                     <input type="Reset" value="Reset Now" name="Reset" class="full-width">
+                </div>
+                <div class="full-width">
+                     <input type="submit" value="Lets Go" class="full-width">
+                </div>
+            </form>
+        </div>
+        <div class="footer text-center">
+            Copyright &COPY;2020 by Ina<br/>
+        </div>
+        <div id="logorow">
+            <a class="contactlink presstogether" href="https://github.com/n0chu" target="_blank"><img class="presstogether" src="assets/img/githublogofinal.png"> GitHub</a>
+            <a class="contactlink presstogether" href="https://www.linkedin.com/in/noleina-garcia-6b9798163/" target="_blank"><img class="presstogether" src="assets/img/linkedinlogofinal.png"> LinkedIn</a>
+            <a class="contactlink presstogether" href="mailto: noleina@gmail.com" target="_blank"><img class="presstogether" src="assets/img/emaillogofinal.png"> Email</a>
+        </div>
+    </body>
+</html>
