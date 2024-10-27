@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study for babe</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+    <div id="container" style="width: 600px; height: 400px; margin: 0 auto;"></div>
+    <div id="results" style="margin-top: 20px; font-family: Arial, sans-serif;"></div>
+
+    <script>
+        const bacteriaData = [
+            { name: 'Strep species', y: 20 },
+            { name: 'E. faecalis', y: 5 },
+            { name: 'GNRs', y: 13 },
+            { name: 'P. aeruginosa', y: 6 },
+            { name: 'MDR GNs', y: 6 },
+            { name: 'Atypicals', y: 12.5 },
+            { name: 'Anaerobes', y: 12.5 },
+            { name: 'VRE faecium', y: 5 },
+            { name: 'MRSA', y: 8 },
+            { name: 'MSSA', y: 12 }
+        ];
+
+        // Array to keep track of selected bacteria
+        const selectedBacteria = new Set();
+
+        const antibiotics = [
+        {
+            name: "trimethoprimsulfamethoxazole",
+            bacteriaList: [
+                { name: 'Strep species', effectivityLevel: 'None'},
+                { name: "E. faecalis", effectivityLevel: 'None'},
+                { name: "GNRs", effectivityLevel: 'High'},
+                { name: "P. aeruginosa", effectivityLevel: 'None'},
+                { name: 'MDR GNs', effectivityLevel: 'None'},
+                { name: "Atypicals", effectivityLevel: 'None'},
+                { name: "Anaerobes", EffectivityLevel: 'None'},
+                { name: "VRE faecium", effectivityLevel: 'None'},
+                { name: "MRSA", effectivityLevel: 'High'},
+                { name: "MSSA", effectivityLevel: 'High'}
+            ]
+        },
+        {
+            name: "clindamycin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: 'High' },
+                { name: "E. faecalis", effectivityLevel: 'None' },
+                { name: "GNRs", effectivityLevel: 'None' },
+                { name: "P. aeruginosa", effectivityLevel: 'None' },
+                { name: "MDR GNs", effectivityLevel: 'None' },
+                { name: "Atypicals", effectivityLevel: 'None' },
+                { name: "Anaerobes", effectivityLevel: 'Medium' },
+                { name: "VRE faecium", effectivityLevel: 'None' },
+                { name: "MRSA", effectivityLevel: 'High' },
+                { name: "MSSA", effectivityLevel: 'High' }
+            ]
+        },
+        {
+            name: "metronidazole",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: 'None' },
+                { name: "E. faecalis", effectivityLevel: 'None' },
+                { name: "GNRs", effectivityLevel: 'None' },
+                { name: "P. aeruginosa", effectivityLevel: 'None' },
+                { name: "MDR GNs", effectivityLevel: 'None' },
+                { name: "Atypicals", effectivityLevel: 'None' },
+                { name: "Anaerobes", effectivityLevel: 'High' },
+                { name: "VRE faecium", effectivityLevel: 'None' },
+                { name: "MRSA", effectivityLevel: 'None' },
+                { name: "MSSA", effectivityLevel: 'None' }
+            ]
+        },
+        {
+            name: "doxycycline",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: 'High' },
+                { name: "E. faecalis", effectivityLevel: 'Medium' },
+                { name: "GNRs", effectivityLevel: 'Medium' },
+                { name: "P. aeruginosa", effectivityLevel: 'None' },
+                { name: "MDR GNs", effectivityLevel: 'None' },
+                { name: "Atypicals", effectivityLevel: 'High' },
+                { name: "Anaerobes", effectivityLevel: 'Medium' },
+                { name: "VRE faecium", effectivityLevel: 'Medium' },
+                { name: "MRSA", effectivityLevel: 'High' },
+                { name: "MSSA", effectivityLevel: 'High' }
+            ]
+        },
+        {
+            name: "daptomycin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: 'High' },
+                { name: "E. faecalis", effectivityLevel: 'High' },
+                { name: "GNRs", effectivityLevel: 'None' },
+                { name: "P. aeruginosa", effectivityLevel: 'None' },
+                { name: "MDR GNs", effectivityLevel: 'None' },
+                { name: "Atypicals", effectivityLevel: 'None' },
+                { name: "Anaerobes", effectivityLevel: 'None' },
+                { name: "VRE faecium", effectivityLevel: 'High' },
+                { name: "MRSA", effectivityLevel: 'High' },
+                { name: "MSSA", effectivityLevel: 'High' }
+            ]
+        },
+        {
+            name: "linezolid",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: 'High' },
+                { name: "E. faecalis", effectivityLevel: 'High' },
+                { name: "GNRs", effectivityLevel: 'None' },
+                { name: "P. aeruginosa", effectivityLevel: 'None' },
+                { name: "MDR GNs", effectivityLevel: 'None' },
+                { name: "Atypicals", effectivityLevel: 'None' },
+                { name: "Anaerobes", effectivityLevel: 'None' },
+                { name: "VRE faecium", effectivityLevel: 'High' },
+                { name: "MRSA", effectivityLevel: 'High' },
+                { name: "MSSA", effectivityLevel: 'High' }
+            ]
+        },
+        {
+            name: "vancomycin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: 'High' },
+                { name: "E. faecalis", effectivityLevel: 'High' },
+                { name: "GNRs", effectivityLevel: 'None' },
+                { name: "P. aeruginosa", effectivityLevel: 'None' },
+                { name: "MDR GNs", effectivityLevel: 'None' },
+                { name: "Atypicals", effectivityLevel: 'None' },
+                { name: "Anaerobes", effectivityLevel: 'None' },
+                { name: "VRE faecium", effectivityLevel: 'None' },
+                { name: "MRSA", effectivityLevel: 'High' },
+                { name: "MSSA", effectivityLevel: 'Medium' }
+            ]
+        },
+        {
+            name: "moxifloxacin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: 'High' },
+                { name: "E. faecalis", effectivityLevel: 'None' },
+                { name: "GNRs", effectivityLevel: 'High' },
+                { name: "P. aeruginosa", effectivityLevel: 'None' },
+                { name: "MDR GNs", effectivityLevel: 'None' },
+                { name: "Atypicals", effectivityLevel: 'High' },
+                { name: "Anaerobes", effectivityLevel: 'Medium' },
+                { name: "VRE faecium", effectivityLevel: 'None' },
+                { name: "MRSA", effectivityLevel: 'None' },
+                { name: "MSSA", effectivityLevel: 'None' }
+            ]
+        },
+        {
+            name: "levofloxacin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: 'High' },
+                { name: "E. faecalis", effectivityLevel: 'None' },
+                { name: "GNRs", effectivityLevel: 'High' },
+                { name: "P. aeruginosa", effectivityLevel: 'Medium' },
+                { name: "MDR GNs", effectivityLevel: 'None' },
+                { name: "Atypicals", effectivityLevel: 'High' },
+                { name: "Anaerobes", effectivityLevel: 'None' },
+                { name: "VRE faecium", effectivityLevel: 'None' },
+                { name: "MRSA", effectivityLevel: 'None' },
+                { name: "MSSA", effectivityLevel: 'None' }
+            ]
+        },
+        {
+            name: "ciprofloxacin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: 'None' },
+                { name: "E. faecalis", effectivityLevel: 'None' },
+                { name: "GNRs", effectivityLevel: 'High' },
+                { name: "P. aeruginosa", effectivityLevel: 'Medium' },
+                { name: "MDR GNs", effectivityLevel: 'None' },
+                { name: "Atypicals", effectivityLevel: 'High' },
+                { name: "Anaerobes", effectivityLevel: 'None' },
+                { name: "VRE faecium", effectivityLevel: 'None' },
+                { name: "MRSA", effectivityLevel: 'None' },
+                { name: "MSSA", effectivityLevel: 'None' }
+            ]
+        },
+        {
+            name: "ertapenem",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: 'High' },
+                { name: "E. faecalis", effectivityLevel: 'None' },
+                { name: "GNRs", effectivityLevel: 'High' },
+                { name: "P. aeruginosa", effectivityLevel: 'None' },
+                { name: "MDR GNs", effectivityLevel: 'None' },
+                { name: "Atypicals", effectivityLevel: 'None' },
+                { name: "Anaerobes", effectivityLevel: 'High' },
+                { name: "VRE faecium", effectivityLevel: 'None' },
+                { name: "MRSA", effectivityLevel: 'None' },
+                { name: "MSSA", effectivityLevel: 'High' }
+            ]
+        },
+        {
+            name: "meropenem",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "medium" },
+                { name: "GNRs", effectivityLevel: "high" },
+                { name: "P. aeruginosa", effectivityLevel: "high" },
+                { name: "MDR GNs", effectivityLevel: "medium" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "high" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "high" }
+            ]
+        },
+        {
+            name: "azithromycin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "medium" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "high" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "none" }
+            ]
+        },
+        {
+            name: "cephalexin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "medium" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "high" }
+            ]
+        },
+        {
+            name: "cefazolin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "medium" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "high" }
+            ]
+        },
+        {
+            name: "ceftriaxone",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "high" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "medium" }
+            ]
+        },
+        {
+            name: "cefepime",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "high" },
+                { name: "P. aeruginosa", effectivityLevel: "high" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "high" }
+            ]
+        },
+        {
+            name: "aztreonam",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "none" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "high" },
+                { name: "P. aeruginosa", effectivityLevel: "medium" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "none" }
+            ]
+        },
+        {
+            name: "aminoglycosides",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "none" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "high" },
+                { name: "P. aeruginosa", effectivityLevel: "high" },
+                { name: "MDR GNs", effectivityLevel: "medium" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "none" }
+            ]
+        },
+        {
+            name: "polymyxin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "none" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "none" },
+                { name: "P. aeruginosa", effectivityLevel: "high" },
+                { name: "MDR GNs", effectivityLevel: "high" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "none" }
+            ]
+        },
+        
+        {
+            name: "colistin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "none" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "high" },
+                { name: "P. aeruginosa", effectivityLevel: "high" },
+                { name: "MDR GNs", effectivityLevel: "high" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "none" }
+            ]
+        },
+        {
+            name: "penicillin V",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "high" },
+                { name: "GNRs", effectivityLevel: "none" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "medium" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "none" }
+            ]
+        },
+        {
+            name: "penicillin G",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "high" },
+                { name: "GNRs", effectivityLevel: "none" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "medium" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "none" }
+            ]
+        },
+        {
+            name: "oxacillin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "medium" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "none" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "high" }
+            ]
+        },
+        {
+            name: "nafcillin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "medium" },
+                { name: "E. faecalis", effectivityLevel: "none" },
+                { name: "GNRs", effectivityLevel: "none" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "high" }
+            ]
+        },
+        {
+            name: "amoxicillin",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "high" },
+                { name: "GNRs", effectivityLevel: "medium" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "none" }
+            ]
+        },
+        {
+            name: "ampicillin",
+            bacteriaList: [
+            { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "high" },
+                { name: "GNRs", effectivityLevel: "medium" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "none" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "none" }
+            ]
+        },
+        {
+            name: "amoxicillin/clavulanic acid",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "high" },
+                { name: "GNRs", effectivityLevel: "high" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "high" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "high" }
+            ]
+        },
+        {
+            name: "ampicillin/sulbactam",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "high" },
+                { name: "GNRs", effectivityLevel: "high" },
+                { name: "P. aeruginosa", effectivityLevel: "none" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "high" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "high" }
+            ]
+        },
+        {
+            name: "piperacillin/tazobactam",
+            bacteriaList: [
+                { name: "Strep species", effectivityLevel: "high" },
+                { name: "E. faecalis", effectivityLevel: "high" },
+                { name: "GNRs", effectivityLevel: "high" },
+                { name: "P. aeruginosa", effectivityLevel: "high" },
+                { name: "MDR GNs", effectivityLevel: "none" },
+                { name: "Atypicals", effectivityLevel: "none" },
+                { name: "Anaerobes", effectivityLevel: "high" },
+                { name: "VRE faecium", effectivityLevel: "none" },
+                { name: "MRSA", effectivityLevel: "none" },
+                { name: "MSSA", effectivityLevel: "high" }
+            ]
+        }
+    ];
+
+
+        // Function to render the pie chart
+        function renderPieChart() {
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Northwestern Feinberg School of Medicine Introductory Guide to Antibiotics'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}' // Show only the name without the y value
+                        },
+                        point: {
+                            events: {
+                                click: function () {
+                                    const bacteria = this.name;
+
+                                    // Toggle selection
+                                    if (selectedBacteria.has(bacteria)) {
+                                        selectedBacteria.delete(bacteria);
+                                        this.setState(); // Reset state to default (unselected)
+                                    } else {
+                                        selectedBacteria.add(bacteria);
+                                        this.setState(1); // Set state to selected
+                                    }
+
+                                    // Display the selected bacteria
+                                    updateResults();
+                                }
+                            }
+                        }
+                    }
+                },
+                tooltip: {
+                    enabled: false // Disable tooltip to avoid showing effectivity level
+                },
+                series: [{
+                    name: 'Effectivity Level',
+                    colorByPoint: true,
+                    data: bacteriaData.map(bacteria => ({
+                        name: bacteria.name,
+                        y: bacteria.y // Determines the size of each slice
+                    }))
+                }]
+            });
+        }
+
+        // Function to update displayed results
+        function updateResults() {
+            const resultsDiv = document.getElementById('results');
+            if (selectedBacteria.size > 0) {
+                // Start building HTML for each selected bacteria
+                let resultHtml = `<h3>Selected Bacteria and Corresponding Antibiotics:</h3><ul>`;
+                
+                selectedBacteria.forEach(bacteria => {
+                    // Categorize antibiotics by effectivity level
+                    const highEffectivity = [];
+                    const mediumEffectivity = [];
+                    const noneEffectivity = [];
+                    
+                    // Find and categorize antibiotics for the current selected bacteria
+                    antibiotics.forEach(antibiotic => {
+                        const targetBacteria = antibiotic.bacteriaList.find(b => b.name === bacteria);
+                        if (targetBacteria) {
+                            switch (targetBacteria.effectivityLevel.toLowerCase()) {
+                                case 'high':
+                                    highEffectivity.push(antibiotic.name);
+                                    break;
+                                case 'medium':
+                                    mediumEffectivity.push(antibiotic.name);
+                                    break;
+                                case 'none':
+                                    noneEffectivity.push(antibiotic.name);
+                                    break;
+                            }
+                        }
+                    });
+
+                    // Create HTML for the bacteria and its categorized antibiotics
+                    resultHtml += `<li><strong>${bacteria}:</strong><ul>`;
+                    resultHtml += `<li><strong>High Effectivity:</strong> ${highEffectivity.length ? highEffectivity.join(', ') : 'None'}</li></br>`;
+                    resultHtml += `<li><strong>Medium Effectivity:</strong> ${mediumEffectivity.length ? mediumEffectivity.join(', ') : 'None'}</li></br>`;
+                    resultHtml += `<li><strong>No Effectivity:</strong> ${noneEffectivity.length ? noneEffectivity.join(', ') : 'None'}</li>`;
+                    resultHtml += `</ul></li></br>`;
+                });
+                
+                resultHtml += `</ul>`;
+                resultsDiv.innerHTML = resultHtml;
+            } else {
+                resultsDiv.innerHTML = `<h3>Please select a bacteria:</h3>`;
+            }
+        }
+
+        // Initialize the pie chart when the page loads
+        renderPieChart();
+    </script>
+</body>
+</html>
+
